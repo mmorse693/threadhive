@@ -1,13 +1,16 @@
 import { Navbar, Container, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import { useTheme } from "../../context/ThemeContext";
+import { useSelector, useDispatch } from "react-redux";
+import { selectToken, selectUser, logout } from "../../store/authSlice";
+import { selectDarkMode, toggleDarkMode } from "../../store/themeSlice";
 import "./Header.css";
 
 function Header() {
   const navigate = useNavigate();
-  const { token, user, logout } = useAuth();
-  const { darkMode, toggleDarkMode } = useTheme();
+  const dispatch = useDispatch();
+  const token = useSelector(selectToken);
+  const user = useSelector(selectUser);
+  const darkMode = useSelector(selectDarkMode);
 
   const handleLogin = () => {
     navigate("/login");
@@ -18,7 +21,7 @@ function Header() {
   };
 
   const handleLogout = () => {
-    logout();
+    dispatch(logout());
     navigate("/login");
   };
 
@@ -37,7 +40,7 @@ function Header() {
         <div className="d-flex align-items-center">
           <button
             className="dark-mode-toggle"
-            onClick={toggleDarkMode}
+            onClick={() => dispatch(toggleDarkMode())}
             aria-label="Toggle dark mode"
             title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
           >
