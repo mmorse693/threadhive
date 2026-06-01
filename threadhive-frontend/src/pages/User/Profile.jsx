@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { Row, Col, Form } from "react-bootstrap";
-import { useAuth } from "../../context/AuthContext";
+import { selectUser, updateUser } from "../../store/authSlice";
 import "./Profile.css";
 
 function Profile() {
   const navigate = useNavigate();
-  const { user, updateUser } = useAuth();
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
 
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({
@@ -34,7 +36,7 @@ function Profile() {
   };
 
   const handleSave = () => {
-    updateUser({ ...user, ...form });
+    dispatch(updateUser({ ...user, ...form }));
     setEditing(false);
   };
 
